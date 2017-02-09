@@ -1,23 +1,33 @@
 <template>
     <div id="app">
-        <img src="./assets/logo.png">
-        <h1>{{ msg }}</h1>
-        <mt-button @click.native="handleClick">Let's do it</mt-button>
+        <m-head :refesh-icon="false" :return-icon="false" title="Music Player"></m-head>
+        <div class="main" :class="{'header-fixed' : headerFixed}">
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
+        </div>
+        <player></player>
     </div>
 </template>
 
 <script>
+import mHead from './components/header/head.vue'
+import player from './components/player.vue'
+
 export default {
     name: 'app',
     data () {
         return {
-            msg: 'Welcome to Your Vue.js App'
+            headerFixed: true,
         }
     },
-    methods: {
-        handleClick: function() {
-            this.$toast('Hello world!')
-        }
+    components: {
+        mHead,
+        player,
     }
 }
 </script>
+
+<style lang="scss">
+    @import "./assets/style";
+</style>

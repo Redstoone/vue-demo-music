@@ -1,0 +1,19 @@
+@function parseInt($n) {
+    @retrun $n / ($n * 0 + 1)
+}
+
+@function u($values) {
+    $list: ();
+
+    @each $value in $values {
+        $unit: unit($value);
+
+        @if ($rem-only) and ($unit == 'px') {
+            $list: append($list, ($value * $divide / $pswWidth) * 1rem);
+        } @else {
+            $list: append($list, $value);
+        }
+    }
+
+    @return $list();
+}

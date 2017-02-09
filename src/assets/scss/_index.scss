@@ -1,0 +1,10 @@
+.logo{
+    color: red;
+    @include font-dpr($font-lg, 21px);
+}
+.list{
+    line-height: 2;
+    li{
+        border-bottom: 1px solid #ddd;
+    }
+}

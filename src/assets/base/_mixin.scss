@@ -1,0 +1,30 @@
+@mixin transition($time: 0.25s){
+    -webkit-transition: all $time ease-in-out;
+    -moz-transition: all $time ease-in-out;
+    -o-transition: all $time ease-in-out;
+    transition: all $time ease-in-out;
+}
+
+@mixin font-dpr($font-size, $line-height: $font-size + 2){
+    font-size: $font-size;
+    // line-height: $line-height;
+    // $unit: unit($line-height);
+
+    // [data-dpr="2"] & {
+    //     font-size: $font-size * 2;
+    //     @if($unit == 'px'){
+    //         line-height: $line-height * 2;
+    //     }
+    // }
+
+    // [data-dpr="3"] & {
+    //     font-size: $font-size * 3;
+    //     @if($unit == 'px'){
+    //         line-height: $line-height * 3;
+    //     }
+    // }
+}
+
+@mixin txt-line($line) {
+    -webkit-line-clamp: $line;
+}

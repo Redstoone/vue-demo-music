@@ -1,0 +1,46 @@
+.bar{
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    width: 100%;
+    height: u(44px);
+    background-color: $white;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    .title{
+        position: absolute;
+        display: block;
+        width: 100%;
+        padding: 0;
+        font-size: $font-lg;
+        font-weight: 500;
+        line-height: u(44px);
+        text-align: center;
+        white-space: nowrap;
+    }
+    .icon{
+        position: relative;
+        z-index: 20;
+        padding: u(0 10px);
+        font-size: u($font-xl);
+        line-height: u(44px);
+    }
+    
+    a{
+        text-decoration: none;
+    }
+
+    &.bar-nav{
+        background-color: $header-bg;
+    }
+
+    a, .title{
+        color: $white;
+    }
+}
+
+.header-fixed {
+    padding-top:u(44px);
+}

@@ -1,6 +1,6 @@
 {
   "name": "vue-demo-music",
-  "description": "music player",
+  "description": "A Vue.js and music player project",
   "version": "1.0.0",
   "author": "redstoone <cy_jing_2010@163.com>",
   "private": true,
@@ -12,6 +12,7 @@
     "vue": "^2.1.0"
   },
   "devDependencies": {
+    "axios": "^0.15.3",
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
@@ -19,9 +20,13 @@
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "mint-ui": "^2.1.1",
+    "node-sass": "^4.5.0",
+    "sass-loader": "^5.0.1",
     "style-loader": "^0.13.1",
     "vue-loader": "^10.0.0",
+    "vue-router": "^2.2.0",
     "vue-template-compiler": "^2.1.0",
+    "vuex": "^2.1.2",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0"
   }

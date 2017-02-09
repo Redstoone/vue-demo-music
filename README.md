@@ -1,6 +1,6 @@
 # vue-demo-music
 
-> music player
+> A Vue.js and music player project
 
 ## Build Setup
 
