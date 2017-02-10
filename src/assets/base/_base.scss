@@ -1,6 +1,7 @@
 @import "variable";
 @import "mixin";
 @import "function";
+@import "mintui";
 
 body,ul,ol,dl,dd,h1,h2,h3,h4,h5,h6,pre,form,fieldset,legend,input,button,textarea,p,blockquote,table,th,td,menu{margin:0;padding:0}
 table{border-collapse:collapse;border-spacing:0;table-layout:fixed}
@@ -15,10 +16,10 @@ address, cite, dfn, em, var,i {font-style: normal;}
 blockquote, q {quotes: none;}
 blockquote:before, blockquote:after,q:before, q:after {content:"";content: none;}
 a { 
-    color:$LinkC; text-decoration:none;cursor: pointer;
+    color:$color-grey; text-decoration:none;cursor: pointer;
     -webkit-tap-highlight-color: rgba(0,0,0,.1);
-    &:link,&:visited, &:active{color: $LinkC;}
-    &:hover, &:focus {color:$HoverC; outline:none;}
+    &:link,&:visited, &:active{color: $color-link;}
+    &:hover, &:focus {color:$color-hover; outline:none;}
     &,span,i,em,u,strong,b,p,img,ul,li,div,dd,dt,dl,ol,table,th,td,h1,h2,h3,h4,h5,h6,input,textarea,button,small,select {
         cursor: pointer; @include transition;
     }
@@ -26,7 +27,7 @@ a {
 abbr[title], acronym[title] {border-bottom: 1px dotted;cursor: help;}
 
 html {overflow-y: scroll;font-family:STHeiti,Microsoft YaHei,Helvetica,Arial,sans-serif;-webkit-text-size-adjust: none; word-break: break-word;font-size:$font-xxxl;}
-body {color: $BaseC;font-size:$font-sm;}
+body {color: $color-grey;font-size:$font-sm;}
 
 
 *, ::before, ::after{box-sizing: border-box;}

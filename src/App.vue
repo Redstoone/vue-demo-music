@@ -1,12 +1,22 @@
 <template>
     <div id="app">
-        <m-head :refesh-icon="false" :return-icon="false" title="Music Player"></m-head>
+        <m-head :menu="true" :refesh="false" :back="false" title="Music Player"></m-head>
+
         <div class="main" :class="{'header-fixed' : headerFixed}">
             <keep-alive>
                 <router-view></router-view>
             </keep-alive>
         </div>
+
         <player></player>
+
+        <div class="side-menu">
+            <div class="menu-list">
+                <div class="menu-header">
+                    <img :src="sideMenuImg">
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -19,6 +29,7 @@ export default {
     data () {
         return {
             headerFixed: true,
+            sideMenuImg: ''
         }
     },
     components: {

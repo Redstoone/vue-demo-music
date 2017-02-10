@@ -1,0 +1,23 @@
+/* tab */
+.main .mint-navbar .mint-tab-item{
+    color: $color-grey;
+    padding: 14px 0;
+}
+.main .mint-navbar .mint-tab-item.is-selected{
+    margin-bottom: 0;
+    position: relative;
+    border: none;
+    color: $color-red;
+}
+.main .mint-navbar .mint-tab-item.is-selected::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    background-color: $color-red;
+    width: 100%;
+    left: 0;
+}
+.main .mint-tab-item-label{
+    font-size: 14px;
+}

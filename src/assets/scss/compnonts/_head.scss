@@ -5,7 +5,7 @@
     z-index: 10;
     width: 100%;
     height: u(44px);
-    background-color: $white;
+    background-color: $color-white;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
@@ -33,11 +33,11 @@
     }
 
     &.bar-nav{
-        background-color: $header-bg;
+        background-color: $color-red;
     }
 
     a, .title{
-        color: $white;
+        color: $color-white;
     }
 }
 

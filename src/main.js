@@ -1,3 +1,5 @@
+require('!style-loader!css-loader!sass-loader!font-awesome/scss/font-awesome.scss');  // get font-awesome
+
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'

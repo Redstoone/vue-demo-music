@@ -1,0 +1,15 @@
+.side-menu{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.4);
+    z-index: 99;
+    .menu-list{
+        background-color: $side-menu-bgc;
+        width: 75%;
+        height: 100%;
+    }
+
+}

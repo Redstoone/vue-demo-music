@@ -2,7 +2,19 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/main.js',
+    entry: './src/main.js',
+    devServer: {
+        hot: true,
+        inline: true,
+        proxy: {
+            '*': {
+                target: 'http://music.163.com/',
+                host:'http:://music.163.com',
+                changeOrigin: true,
+                secure: false,
+            }
+        }
+    },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -34,7 +46,7 @@ module.exports = {
         loader: 'style-loader!css-loader'
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+        test: /\.(eot(|\?v=.*)|woff(|\?v=.*)|woff2(|\?v=.*)|ttf(|\?v=.*)|svg(|\?v=.*))$/,
         loader: 'file-loader'
       },
       {
