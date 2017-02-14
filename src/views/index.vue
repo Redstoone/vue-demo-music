@@ -34,7 +34,7 @@ export default {
         init: function(params = {}) {
             let _this = this
 
-            _this.$api.get('data/all/20/1', params, function(res) {
+            _this.$api.get('/episodes/category/57959fd6b05063000b284f58?page_no=1&page_size=10', params, function(res) {
                 _this.lists = res.results
                 console.log(res.results)
             })

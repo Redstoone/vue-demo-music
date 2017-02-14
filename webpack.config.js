@@ -2,19 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-    entry: './src/main.js',
-    devServer: {
-        hot: true,
-        inline: true,
-        proxy: {
-            '*': {
-                target: 'http://music.163.com/',
-                host:'http:://music.163.com',
-                changeOrigin: true,
-                secure: false,
-            }
-        }
-    },
+  entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -65,7 +53,22 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    hot: true,
+    inline: true,
+    stats: { colors: true },
+    proxy: {
+        '/weapi/*': {
+            target: 'http://music.163.com',
+            secure: false,
+            changeOrigin: true,
+        },
+        ///ok/ok  --> http://pod.gf.com.cn/api/information/podcastserver/1.0.0/episodes/category/57959fd6b05063000b284f58?page_no=1&page_size=10
+        '/ok/*':{
+            target: 'http://pod.gf.com.cn/api/information/podcastserver/1.0.0',
+            pathRewrite: {'^/ok':'/episodes/category/57959fd6b05063000b284f58?page_no=1&page_size=10'},
+            changeOrigin: true
+          },
+    }
   },
   performance: {
     hints: false
