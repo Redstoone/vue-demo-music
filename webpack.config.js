@@ -56,6 +56,11 @@ module.exports = {
     hot: true,
     inline: true,
     stats: { colors: true },
+    headers: {
+      "Referer": "http://music.163.com/",
+    }
+    port: 8080,
+    host: '0.0.0.0',
     proxy: {
         '/weapi/*': {
             target: 'http://music.163.com',
@@ -66,7 +71,8 @@ module.exports = {
         '/ok/*':{
             target: 'http://pod.gf.com.cn/api/information/podcastserver/1.0.0',
             pathRewrite: {'^/ok':'/episodes/category/57959fd6b05063000b284f58?page_no=1&page_size=10'},
-            changeOrigin: true
+            changeOrigin: true,
+            secure: false,
           },
     }
   },
