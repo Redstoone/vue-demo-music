@@ -58,7 +58,7 @@ module.exports = {
     stats: { colors: true },
     headers: {
       "Referer": "http://music.163.com/",
-    }
+    },
     port: 8080,
     host: '0.0.0.0',
     proxy: {
