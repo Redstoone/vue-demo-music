@@ -8,6 +8,9 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'build.js'
   },
+  node: {
+    fs: "empty"
+  },
   module: {
     rules: [
       {
@@ -27,7 +30,8 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        query: {presets: ['es2015']},
       },
       {
         test: /\.css$/,
