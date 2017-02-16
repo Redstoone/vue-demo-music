@@ -7,9 +7,9 @@ const
 
 const
     URI = {
-        record  : 'http://music.163.com/weapi/v1/play/record',
-        uri     : 'http://music.163.com/weapi/song/enhance/player/url',
-        login   : 'http://music.163.com/weapi/login'
+        record  : 'http://192.168.56.1:8080/weapi/v1/play/record?csrf_token',
+        uri     : 'http://192.168.56.1:8080/weapi/song/enhance/player/url',
+        login   : 'http://192.168.56.1:8080/weapi/login'
     }
 
 
@@ -68,6 +68,7 @@ const getRecord = (uid, period) => {
             total   : true,
             type    : period ^ 1
         });
+
         console.log(data.params, data.encSecKey)
         request.post({
             uri: URI.record,

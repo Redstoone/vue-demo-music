@@ -1,6 +1,17 @@
 const
     crypto = require('crypto'),
+    qs = require('querystring'),
     Big = require('big.js')
+
+const powMod = (i, e, m) => {
+    let d = new Big(1)
+    i = i.mod(m)
+    for (; e > 0; e >>= 1) {
+        if (e & 1) d = d.mul(i).mod(m)
+        i = i.pow(2).mod(m)
+    }
+    return d
+}
 
 Big.prototype.toHex = function() {
     let
@@ -21,16 +32,6 @@ Big.prototype.toHex = function() {
         e == 15 ? e = 'f' : null
         return e
     }).reverse().join('')
-}
-
-const powMod = (i, e, m) => {
-    let d = new Big(1)
-    i = i.mod(m)
-    for (; e > 0; e >>= 1) {
-        if (e & 1) d = d.mul(i).mod(m)
-        i = i.pow(2).mod(m)
-    }
-    return d
 }
 
 const rsa = data => {
@@ -64,15 +65,14 @@ const encrypt = data => {
 
     data = JSON.stringify(data)
 
-    
-    // 随机数生成
     const randomString = len => {
         const
             alphabets = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
         let
             a, b, c = ''
         for (a = 0; a < len; a += 1) {
-            b = Math.floor(Math.random() * alphabets.length),
+            b = Math.random() * alphabets.length,
+            b = Math.floor(b),
             c += alphabets.charAt(b);
         }
         return c
@@ -85,16 +85,15 @@ const encrypt = data => {
         return `${cipher.update(v, 'utf8', 'base64')}${cipher.final('base64')}`
     }
 
-    // const split = s => {
-    //     const arr = []
-    //     for (let i = 0; i < s.length; i += 2) {
-    //         arr.push(parseInt(s.substr(i, 2), 16))
-    //     }
-    //     return arr
-    // }
+    const split = s => {
+        const arr = []
+        for (let i = 0; i < s.length; i += 2) {
+            arr.push(parseInt(s.substr(i, 2), 16))
+        }
+        return arr
+    }
 
     const str = randomString(16)
-    console.log(data, str, new Big(Math.pow(16, 4)))
     return {
         params: aes(aes(data, z), str),
         encSecKey: rsa(str)

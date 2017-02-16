@@ -34,10 +34,7 @@ export default {
         init: function(params = {}) {
             let _this = this
 
-            _this.$api.post('/weapi/cdns', params, function(res) {
-                _this.lists = res.results
-                console.log(res.results)
-            })
+            _this.$api.getList()
         },
 
         handleClick: function() {
