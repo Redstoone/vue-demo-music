@@ -75,7 +75,12 @@ module.exports = {
             target: 'http://music.163.com',
             changeOrigin: true,
             secure: false,
-          },
+        },
+        '/discover/*':{
+            target: 'http://music.163.com',
+            changeOrigin: true,
+            secure: false,
+        },
     }
   },
   performance: {

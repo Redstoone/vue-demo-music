@@ -1,13 +1,14 @@
 // import axios from 'axios'
 import crypto from 'crypto'
 import request from 'request'
+import axios from 'axios'
 
 import encrypt from './encrypt'
 
 const music = require('./music.js')
 
 const
-    BASE_URL = 'http://192.168.63.192:8080/'
+    BASE_URL = 'http://192.168.56.1:8080/'
 
 
 // 判断元素类型
@@ -33,46 +34,38 @@ function filter_null(o) {
     return o
 }
 
-function _api_base(method, url, params='', timeout='', success, failure) {
-    // return new Promise(resolve => {
-        let 
-            header = {
+function httpRequest(method, uri, params='', timeout='', success, failure) {
+    return new Promise(resolve => {
+        let header = {
                 'Accept': '*/*',
                 'Accept-Encoding': 'gzip,deflate,sdch',
                 'Accept-Language': 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
                 'Connection': 'keep-alive',
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Host': 'music.163.com',
-                'Referer': 'http://music.163.com/search/',
-                'User-Agent':
-                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
-            }, r
-            
-        if(method === 'Login_POST') {
-            r = request.post({
-                uri: BASE_URL + url,
-                form: params,
-                headers: {
-                    'Referer' : 'http://music.163.com/'
-                }
-            })
-            // }, (...results) => resolve(results))
-        }else{
-            r = request(method, BASE_URL + url).set({'Accept': 'application/json'})
-            params = filter_null(params)
-            if (method === 'POST' || method === 'PUT') {
-                if (toType(params) == 'object') {
-                    params = JSON.stringify(params)
-                }
-                r.send(params)
-            } else if (method === 'GET' || method === 'DELETE') {
-                r.query(params)
-            } 
+                'Referer': 'http://music.163.com/',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
+            }
 
-            console.log(r);
-            // r.end((...results) => resolve(results))
+        if (method === 'Login_POST') {
+            request.post(BASE_URL + uri, {
+                form: params,
+                headers: header
+            }, (...results) => resolve(results))
+        } else if (method === 'GET'){
+            console.log(BASE_URL + uri)
+            request.get(BASE_URL + uri, {
+                headers: {
+                    'Referer': 'http://music.163.com/',
+                }
+            }, (...results) => resolve(results))
+        } else if (method === 'POST') {
+            request.post(BASE_URL + uri, {
+                params: JSON.stringify(params),
+                headers: header
+            }, (...results) => resolve(results))
         }
-    // })
+    })
 }
 
 const NetEase = {
@@ -80,8 +73,6 @@ const NetEase = {
     * 获取听歌排行
     * uid:
     *    用户 id
-    *    打开云音乐的个人主页
-    *    链接里会有
     * period:
     *    0: 一周
     *    1: 所有
@@ -95,7 +86,7 @@ const NetEase = {
             type    : period ^ 1
         });
 
-        _api_base('Login_POST', 'v1/play/record', data)
+        httpRequest('Login_POST', 'v1/play/record', data)
         // .then(results => {
         //     console.log(results)
         // })
@@ -110,12 +101,29 @@ const NetEase = {
         })
     },
 
-    user_playlist: function(uid, offset=0, limit=100) {
-        let url = 'api/user/playlist/?offset=' + offset + '&limit=' + limit + '&uid=' + uid
-        console.log(uid, url)
+    // 用户歌单
+    userPlaylist: function(uid, offset=0, limit=100) {
+        let uri = 'api/user/playlist?offset='+offset+'&limit='+limit+'&uid='+uid
 
-        _api_base('GET', url)
-        .then(results => {
+        httpRequest('GET', uri).then(results => {
+            console.log(results)
+        })
+    },
+
+    // 私人FM
+    personFM: function() {
+        let uri = 'api/radio/get'
+
+        httpRequest('GET', uri).then(results => {
+            console.log(results)
+        })
+    },
+
+    //
+    playlistClasses: function() {
+        let uri = 'discover/playlist/'
+
+        httpRequest('GET', uri).then(results => {
             console.log(results)
         })
     }

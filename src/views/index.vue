@@ -34,7 +34,9 @@ export default {
         init: function(params = {}) {
             let _this = this
 
-            _this.$api.user_playlist('6860494')
+            _this.$api.personFM()
+            _this.$api.playlistClasses()
+            _this.$api.userPlaylist()
         },
 
         handleClick: function() {
