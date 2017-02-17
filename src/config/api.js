@@ -7,35 +7,73 @@ import encrypt from './encrypt'
 const music = require('./music.js')
 
 const
-    BASE_URL = 'http://192.168.56.1:8080/weapi/'
+    BASE_URL = 'http://192.168.63.192:8080/'
 
 
-// function _api_base(method, type, url, params, success, failure) {
-//     let conf = {
-//         method: method,
-//         url: url,
-//         baseURL: BASE_URL,
-//         withCredentials: true,
-//         headers: {
-//             'Cookie': 'appver=1.5.0.75771',
-//             'Referer': 'http://music.163.com',
-//         },
-//         params: {
-//             encSecKey: '4773e48ef1b8b57a30ac3d5c3b4afa0609783884b7ccde852e969ab92007158b27e05d5a52ef9159a21a405bd610cd054825239590f948a73043c9bed27ad60759d9f0c557fa5d25be585f275b3ad048c2189f7353637558fff975b0ec07b20e5911d2e806beb979f6b926580f6716a4fc5e1006777571d3c06c24c2c138e96e',
-//             params: 'w1a6doIV5nUu7n0yyZR4hFLU0JDS78++S1xYr2Ir1wlHFg3aC6VYP2jFAZKGJ1Oj'
-//         },
-//     };
+// 判断元素类型
+function toType(obj) {
+    return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+}
 
-//     axios(conf)
-//     .then(function (response) {
-//         console.log(response)
-//         success(response.body)
-//     })
-//     .catch(function (error) {
-//         console.log(error)
-//         // failure(error.body)
-//     });
-// }
+// 函数过滤
+function filter_null(o) {
+    for (let key in o) {
+        if (o[key] == null) {
+            delete o[key]
+        }
+
+        if (toType(o[key]) == 'string') {
+            o[key] = o[key].trim()
+            if (o[key].length == 0) {
+                delete o[key]
+            }
+        }
+    }
+
+    return o
+}
+
+function _api_base(method, url, params='', timeout='', success, failure) {
+    // return new Promise(resolve => {
+        let 
+            header = {
+                'Accept': '*/*',
+                'Accept-Encoding': 'gzip,deflate,sdch',
+                'Accept-Language': 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
+                'Connection': 'keep-alive',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Host': 'music.163.com',
+                'Referer': 'http://music.163.com/search/',
+                'User-Agent':
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
+            }, r
+            
+        if(method === 'Login_POST') {
+            r = request.post({
+                uri: BASE_URL + url,
+                form: params,
+                headers: {
+                    'Referer' : 'http://music.163.com/'
+                }
+            })
+            // }, (...results) => resolve(results))
+        }else{
+            r = request(method, BASE_URL + url).set({'Accept': 'application/json'})
+            params = filter_null(params)
+            if (method === 'POST' || method === 'PUT') {
+                if (toType(params) == 'object') {
+                    params = JSON.stringify(params)
+                }
+                r.send(params)
+            } else if (method === 'GET' || method === 'DELETE') {
+                r.query(params)
+            } 
+
+            console.log(r);
+            // r.end((...results) => resolve(results))
+        }
+    // })
+}
 
 const NetEase = {
     /*
@@ -49,30 +87,35 @@ const NetEase = {
     *    1: 所有
     */
     getRecord: function(uid, period) {
-        return new Promise(resolve => {
-            const data = encrypt({
-                uid,
-                limit   : 1000,
-                offset  : 0,
-                total   : true,
-                type    : period ^ 1
-            });
+        const data = encrypt({
+            uid,
+            limit   : 1000,
+            offset  : 0,
+            total   : true,
+            type    : period ^ 1
+        });
 
-            request.post({
-                uri: BASE_URL + 'v1/play/record',
-                form: {
-                    params      : data.params,
-                    encSecKey   : data.encSecKey
-                },
-                headers: {
-                    'Referer' : 'http://music.163.com/'
-                }
-            }, (...results) => resolve(results))
-        })
+        _api_base('Login_POST', 'v1/play/record', data)
+        // .then(results => {
+        //     console.log(results)
+        // })
     },
 
     getList: function() {
-        music.getRecord('1760687', 1).then(results => {
+        music.getRecord('6860494', 1).then(results => {
+            console.log(results)
+        })
+        music.login('18767136845', 'May_2015').then(results => {
+            console.log(results)
+        })
+    },
+
+    user_playlist: function(uid, offset=0, limit=100) {
+        let url = 'api/user/playlist/?offset=' + offset + '&limit=' + limit + '&uid=' + uid
+        console.log(uid, url)
+
+        _api_base('GET', url)
+        .then(results => {
             console.log(results)
         })
     }

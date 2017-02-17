@@ -71,10 +71,8 @@ module.exports = {
             secure: false,
             changeOrigin: true,
         },
-        ///ok/ok  --> http://pod.gf.com.cn/api/information/podcastserver/1.0.0/episodes/category/57959fd6b05063000b284f58?page_no=1&page_size=10
-        '/ok/*':{
-            target: 'http://pod.gf.com.cn/api/information/podcastserver/1.0.0',
-            pathRewrite: {'^/ok':'/episodes/category/57959fd6b05063000b284f58?page_no=1&page_size=10'},
+        '/api/*':{
+            target: 'http://music.163.com',
             changeOrigin: true,
             secure: false,
           },

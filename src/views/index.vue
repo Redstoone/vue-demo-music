@@ -34,7 +34,7 @@ export default {
         init: function(params = {}) {
             let _this = this
 
-            _this.$api.getList()
+            _this.$api.user_playlist('6860494')
         },
 
         handleClick: function() {
