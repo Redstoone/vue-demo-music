@@ -68,8 +68,8 @@ module.exports = {
     proxy: {
         '/weapi/*': {
             target: 'http://music.163.com',
-            secure: false,
             changeOrigin: true,
+            secure: false,
         },
         '/api/*':{
             target: 'http://music.163.com',

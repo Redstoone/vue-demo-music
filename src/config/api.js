@@ -11,97 +11,109 @@ const
     BASE_URL = 'http://192.168.56.1:8080/'
 
 
-// 判断元素类型
-function toType(obj) {
-    return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
-}
+function httpRequest(method, uri, data='', timeout='', success, failure) {
 
-// 函数过滤
-function filter_null(o) {
-    for (let key in o) {
-        if (o[key] == null) {
-            delete o[key]
+    let header = {
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip,deflate,sdch',
+            'Accept-Language': 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
+            'Connection': 'keep-alive',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Host': 'music.163.com',
+            'Referer': 'http://music.163.com/',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
         }
 
-        if (toType(o[key]) == 'string') {
-            o[key] = o[key].trim()
-            if (o[key].length == 0) {
-                delete o[key]
-            }
-        }
-    }
-
-    return o
-}
-
-function httpRequest(method, uri, params='', timeout='', success, failure) {
-    return new Promise(resolve => {
-        let header = {
-                'Accept': '*/*',
-                'Accept-Encoding': 'gzip,deflate,sdch',
-                'Accept-Language': 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
-                'Connection': 'keep-alive',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Host': 'music.163.com',
-                'Referer': 'http://music.163.com/',
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
-            }
-
-        if (method === 'Login_POST') {
-            request.post(BASE_URL + uri, {
-                form: params,
-                headers: header
-            }, (...results) => resolve(results))
-        } else if (method === 'GET'){
-            console.log(BASE_URL + uri)
+    if (method === 'Login_POST') {
+        return new Promise(resolve => {
+            request.post(
+                {
+                    uri: BASE_URL + uri,
+                    form: {
+                        params: data.params,
+                        encSecKey: data.encSecKey
+                    },
+                    headers: {
+                        'Referer' : 'http://music.163.com/'
+                    }
+                },
+                function(...results) {
+                    resolve(results)
+                }
+            )
+        })
+    } else if (method === 'GET'){
+        return new Promise(resolve => {
             request.get(BASE_URL + uri, {
                 headers: {
                     'Referer': 'http://music.163.com/',
                 }
             }, (...results) => resolve(results))
-        } else if (method === 'POST') {
+        })
+    } else if (method === 'POST') {
+        console.log(JSON.stringify(data));
+        return new Promise(resolve => {
             request.post(BASE_URL + uri, {
-                params: JSON.stringify(params),
+                body: JSON.stringify(data),
                 headers: header
             }, (...results) => resolve(results))
-        }
-    })
+        })
+    }
 }
 
-const NetEase = {
-    /*
-    * 获取听歌排行
-    * uid:
-    *    用户 id
-    * period:
-    *    0: 一周
-    *    1: 所有
-    */
-    getRecord: function(uid, period) {
-        const data = encrypt({
-            uid,
-            limit   : 1000,
-            offset  : 0,
-            total   : true,
-            type    : period ^ 1
-        });
+const NetEaseAPI = {
 
-        httpRequest('Login_POST', 'v1/play/record', data)
-        // .then(results => {
+    // 登录 ok
+    login: function(username, password) {
+        let uri = 'weapi/login',
+            data = encrypt({
+                username: username,
+                password: crypto.createHash('md5').
+                    update(password).digest('hex'),
+                rememberLogin: true,
+                csrf_token: ''
+            })
+
+        httpRequest('Login_POST', uri, data).then(results => {
+            console.log(results)
+        })
+
+        // music.login(username, password).then(results => {
         //     console.log(results)
         // })
     },
 
-    getList: function() {
-        music.getRecord('6860494', 1).then(results => {
+    // 手机登录
+    /*phoneLogin: function(username, password) {
+        let
+            data = encrypt({
+                username: username,
+                password: crypto.createHash('md5').
+                    update(password).digest('hex'),
+                rememberLogin: true,
+                csrf_token: ''
+            }),
+            uri = 'weapi/login'
+
+        httpRequest('Login_POST', uri, data).then(results => {
             console.log(results)
         })
-        music.login('18767136845', 'May_2015').then(results => {
+    }*/
+
+    // 每日签到    移动端(0) PC端(1)  *(type)* 403
+    dailySignin: function(type) {
+        let uri = 'weapi/point/dailyTask',
+            data = encrypt({
+                type: type
+            })
+
+        httpRequest('Login_POST', uri, data).then(results => {
             console.log(results)
         })
     },
 
-    // 用户歌单
+
+    // 用户歌单 ok
     userPlaylist: function(uid, offset=0, limit=100) {
         let uri = 'api/user/playlist?offset='+offset+'&limit='+limit+'&uid='+uid
 
@@ -110,7 +122,7 @@ const NetEase = {
         })
     },
 
-    // 私人FM
+    // 私人FM 403
     personFM: function() {
         let uri = 'api/radio/get'
 
@@ -119,7 +131,47 @@ const NetEase = {
         })
     },
 
-    //
+    //  FM like
+    fmLike: function(songid, like=true, time=25, alg='itembased') {
+        let uri = 'api/radio/like?alg='+alg+'&trackId='+songid+'&like='+like+'&time='+time
+
+        httpRequest('GET', uri).then(results => {
+            console.log(results)
+        })
+    },
+
+    // FM trash
+    fmTrash: function(songid, time=25, alg='RT') {
+        let uri = 'api/radio/trash/add?alg='+alg+'&songId='+songid+'&time='+time
+
+        httpRequest('GET', uri).then(results => {
+            console.log(results)
+        })
+    },
+
+    // 搜索    单曲(1)，歌手(100)，专辑(10)，歌单(1000)，用户(1002)  *(type)*
+    search: function(s, stype=1, offset=0, total='true', limit=60) {
+        let uri = 'weapi/search/suggest/web',
+            data = {
+                's': s,
+                'type': stype,
+                'offset': offset,
+                'total': total,
+                'limit': limit
+            }
+
+        httpRequest('login_POST', uri, data).then(results => {
+            console.log(results)
+        })
+    },
+
+    unpowMod: function(encSecKey) {
+        console.log(encrypt.rsa('asdfghjklqwertyu'))
+
+        console.log(encrypt.dePowMod(encrypt.rsa('asdfghjklqwertyu')))
+    },
+
+    // 分类歌单
     playlistClasses: function() {
         let uri = 'discover/playlist/'
 
@@ -129,4 +181,4 @@ const NetEase = {
     }
 }
 
-export default NetEase
+export default NetEaseAPI

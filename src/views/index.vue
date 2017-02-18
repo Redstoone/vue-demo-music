@@ -33,10 +33,14 @@ export default {
     methods: {
         init: function(params = {}) {
             let _this = this
+            // _this.$api.userPlaylist(6860494) ok
+            // _this.$api.login('18767136845', 'May_2015') ok
 
-            _this.$api.personFM()
-            _this.$api.playlistClasses()
-            _this.$api.userPlaylist()
+            // _this.$api.dailySignin(1) 403
+            // _this.$api.powMod())
+            _this.$api.unpowMod()
+            // _this.$api.personFM() 403
+            // _this.$api.playlistClasses()  url error
         },
 
         handleClick: function() {
