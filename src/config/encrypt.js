@@ -48,14 +48,16 @@ const powMod = (i, e, m) => {
 const dePowMod = (rsaCode) => {
     debugger
     rsaCode =new Big(parseInt(rsaCode, 16))
-    let m = new Big(parseInt(modulus, 16))
-    for(let i=1; ; i*i) {
-        let x = m.mul(i).plus(rsaCode).sqrt();
+    let m = new Big(parseInt(modulus, 16)),
+        i = new Big(1),
+        x = i
 
-        if(x === parseInt(x)) {
-            return x
-        }
-    }
+    do {
+        x = m.mul(i).plus(rsaCode).sqrt();
+        i = i.pow(2)
+    } while (x === parseInt(x))
+
+    return x
 }
 
 // RSA加密
