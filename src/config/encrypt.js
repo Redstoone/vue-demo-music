@@ -30,34 +30,74 @@ Big.prototype.toHex = function() {
     }).reverse().join('')
 }
 
-Big.prototype.toDecimal = function() {
-
-}
-
-
 const powMod = (i, e, m) => {
     let d = new Big(1)
     i = i.mod(m)
     for (; e > 0; e >>= 1) {
         if (e & 1) d = d.mul(i).mod(m)
         i = i.pow(2).mod(m)
+        console.log(i)
     }
     return d
 }
 
+const toDecimal = str => {
+    let r = str.split('').reverse(),
+        dec = new Big(0)
+    r.map((val, index, arr) => {
+        switch(val.toLowerCase()){
+            case 'a':
+                val = 10
+                break;
+            case 'b':
+                val = 11
+                break;
+            case 'c':
+                val = 12
+                break;
+            case 'd':
+                val = 13
+                break;
+            case 'e':
+                val = 14
+                break;
+            case 'f':
+                val = 15
+                break;
+            default:
+                val = parseInt(val)
+        }
+        dec = dec.plus(new Big(val).mul(new Big(16).pow(index)))
+    })
+
+    return dec
+}
+
 const dePowMod = (rsaCode) => {
     debugger
-    rsaCode =new Big(parseInt(rsaCode, 16))
-    let m = new Big(parseInt(modulus, 16)),
-        i = new Big(1),
-        x = i
+    let e = 65537
+    // for (; e > 0; ) {
+    //     console.log(e)
+    //     e >>= 1
+    // }
+    for(let i=0; i<16; i++){
+        console.log(Math.pow(2,i));
+    }
 
-    do {
-        x = m.mul(i).plus(rsaCode).sqrt();
-        i = i.pow(2)
-    } while (x === parseInt(x))
+    // rsaCode = toDecimal(rsaCode)
+    // let m = toDecimal(modulus),
+    //     i = new Big(0),
+    //     x = i
 
-    return x
+    // console.log(rsaCode, m, i, x)
+
+    // do {
+    //     x = m.mul(i).plus(rsaCode)
+    //     x = x.sqrt();
+    //     i = i.plus(1)
+    // } while (x === parseInt(x))
+
+    // return x
 }
 
 // RSA加密

@@ -8,7 +8,7 @@ import encrypt from './encrypt'
 const music = require('./music.js')
 
 const
-    BASE_URL = 'http://192.168.56.1:8080/'
+    BASE_URL = 'http://192.168.63.192:8080/'
 
 
 function httpRequest(method, uri, data='', timeout='', success, failure) {
