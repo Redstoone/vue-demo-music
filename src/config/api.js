@@ -8,7 +8,7 @@ import encrypt from './encrypt'
 const music = require('./music.js')
 
 const
-    BASE_URL = 'http://192.168.63.192:8080/'
+    BASE_URL = 'http://192.168.56.1:8080/'
 
 
 function httpRequest(method, uri, data='', timeout='', success, failure) {
@@ -166,9 +166,11 @@ const NetEaseAPI = {
     },
 
     unpowMod: function(encSecKey) {
-        console.log(encrypt.rsa('asdfghjklqwertyu'))
+        encrypt.c()
 
-        console.log(encrypt.dePowMod(encrypt.rsa('asdfghjklqwertyu')))
+        // console.log(encrypt.rsa('asdfghjklqwertyu'))
+
+        // console.log(encrypt.dePowMod(encrypt.rsa('asdfghjklqwertyu')))
     },
 
     // 分类歌单

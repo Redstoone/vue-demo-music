@@ -36,7 +36,6 @@ const powMod = (i, e, m) => {
     for (; e > 0; e >>= 1) {
         if (e & 1) d = d.mul(i).mod(m)
         i = i.pow(2).mod(m)
-        console.log(i)
     }
     return d
 }
@@ -45,59 +44,48 @@ const toDecimal = str => {
     let r = str.split('').reverse(),
         dec = new Big(0)
     r.map((val, index, arr) => {
-        switch(val.toLowerCase()){
-            case 'a':
-                val = 10
-                break;
-            case 'b':
-                val = 11
-                break;
-            case 'c':
-                val = 12
-                break;
-            case 'd':
-                val = 13
-                break;
-            case 'e':
-                val = 14
-                break;
-            case 'f':
-                val = 15
-                break;
-            default:
-                val = parseInt(val)
-        }
+        val = val.toLowerCase()
+
+        val == 'a' ? val = 10 : null
+        val == 'b' ? val = 11 : null
+        val == 'c' ? val = 12 : null
+        val == 'd' ? val = 13 : null
+        val == 'e' ? val = 14 : null
+        val == 'f' ? val = 15 : null
+
         dec = dec.plus(new Big(val).mul(new Big(16).pow(index)))
     })
-
     return dec
 }
 
-const dePowMod = (rsaCode) => {
-    debugger
-    let e = 65537
-    // for (; e > 0; ) {
-    //     console.log(e)
-    //     e >>= 1
-    // }
-    for(let i=0; i<16; i++){
-        console.log(Math.pow(2,i));
-    }
-
+const dePowMod = (rsaCode, mo=65537) => {
     // rsaCode = toDecimal(rsaCode)
     // let m = toDecimal(modulus),
-    //     i = new Big(0),
-    //     x = i
+    //     d = new Big(1)
 
-    // console.log(rsaCode, m, i, x)
 
-    // do {
-    //     x = m.mul(i).plus(rsaCode)
-    //     x = x.sqrt();
-    //     i = i.plus(1)
-    // } while (x === parseInt(x))
+    debugger
+    rsaCode = new Big(rsaCode)
+    let m = new Big(mo),
+        d = new Big(1)
 
-    // return x
+    // for(let k=0; k<16; k++){
+        // let e = Math.pow(2, k),
+        let i = new Big(0),
+            x = i
+        // if (e & 1) d = d.mul(i).mod(m)
+        do {
+            x = m.mul(i).plus(rsaCode)
+            x = x.sqrt();
+            i = i.plus(1)
+            console.log(x, m, i)
+        } while (x === parseInt(x))
+
+
+        console.log(x.pow(2).mod(m));
+        d = x;
+    // }
+    return d
 }
 
 // RSA加密
@@ -121,7 +109,7 @@ const rsa = secKey => {
         n = n.plus(e)
     }
     n = n.toString()
-    return powMod(new Big(n), 65537, new Big('157794750267131502212476817800345498121872783333389747424011531025366277535262539913701806290766479189477533597854989606803194253978660329941980786072432806427833685472618792592200595694346872951301770580765135349259590167490536138082469680638514416594216629258349130257685001248172188325316586707301643237607')).toHex()
+    return powMod(new Big(n), 65537, toDecimal(modulus)).toHex()
 }
 
 const split = s => {
@@ -160,7 +148,24 @@ const encrypt = data => {
     }
 }
 
+const c = () =>{
+    console.log(powMod(new Big(11), 512, new Big(65537)))
+    console.log(powMod(new Big(12), 512, new Big(65537)))
+    console.log(powMod(new Big(13), 512, new Big(65537)))
+    console.log(powMod(new Big(14), 512, new Big(65537)))
+    console.log(powMod(new Big(15), 512, new Big(65537)))
+    console.log(powMod(new Big(16), 512, new Big(65537)))
+    console.log(powMod(new Big(17), 512, new Big(65537)))
+    console.log(powMod(new Big(18), 512, new Big(65537)))
+    console.log(powMod(new Big(19), 512, new Big(65537)))
+    console.log(powMod(new Big(20), 512, new Big(65537)))
+
+    console.log(dePowMod('31534'))
+}
+
 module.exports = {
+    c,
+    powMod,
     dePowMod,
     rsa,
     powMod,
